@@ -1,29 +1,35 @@
 ﻿using exemploMessagem.models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace exemploMessagem
 {
-	public partial class MainPage : MasterDetailPage
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+	public partial class Master : ContentPage
 	{
-        private int quantItens = 0;
+        ObservableCollection<string> itens = new ObservableCollection<string>();
 
-		public MainPage()
+		public Master ()
 		{
-			InitializeComponent();
+			InitializeComponent ();
 
-            this.Master = new Master();
-            this.Detail = new NavigationPage(new Detail());
+
+            itens.Add("Item 1");
+            itens.Add("Item 2");
+            listView.ItemsSource = itens;
 
             MessagingCenter.Subscribe<Mensagem>(this, "mensagem", registroItem => {
-                quantItens++;
-                Item.Text = $"{quantItens} ITENS";
+                itens.Add(registroItem.Descricao);
             });
-		}
+
+        }
 
         protected override void OnDisappearing()
         {

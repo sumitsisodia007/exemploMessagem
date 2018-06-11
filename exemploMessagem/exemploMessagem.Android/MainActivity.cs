@@ -6,6 +6,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Xamarin.Forms;
+using exemploMessagem.models;
 
 namespace exemploMessagem.Droid
 {
@@ -21,6 +23,21 @@ namespace exemploMessagem.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
+
+            MessagingCenter.Subscribe<Mensagem>(this, "mensagem", mensagem => {
+                EnviarMensagem(mensagem.Descricao);
+            });
+        }
+
+        public void EnviarMensagem(string mensagem)
+        {
+            Toast.MakeText(this.ApplicationContext, mensagem, ToastLength.Long).Show();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            MessagingCenter.Unsubscribe<Mensagem>(this, "mensagem");
         }
     }
 }
